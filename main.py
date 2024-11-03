@@ -4,7 +4,7 @@ from src.gameLogic import GameLogic
 from src.settings import *
 
 
-class Game:
+class Game: #Класса Game служит для инициализации переменных и настройки параметров игры
     def __init__(self):
         pg.init()
         pg.display.set_caption('TETRIS')
@@ -16,7 +16,7 @@ class Game:
         self.bg_image = pg.image.load(Path('src/background.png')).convert_alpha()
         self.bg_image = pg.transform.scale(self.bg_image, WINDOW_RES)
 
-    def drop_shadow_text(self, text, size, x, y, colour=(255, 255, 255), drop_colour=(0, 0, 0)):
+    def drop_shadow_text(self, text, size, x, y, colour=(255, 255, 255), drop_colour=(0, 0, 0)): #drop_shadow_text используется для вывода текста с тенью на экране
         text_font = pg.font.SysFont('didot.ttc', size)
         drop_shadow_offset = 1 + (size // 15)
         text_bitmap = text_font.render(text, True, drop_colour)
@@ -24,7 +24,7 @@ class Game:
         text_bitmap = text_font.render(text, True, colour)
         self.screen.blit(text_bitmap, (x, y))
 
-    def check_events(self):
+    def check_events(self): #check_events используется для обработки всех событий, происходящих в игре
         for EVENT in pg.event.get():
             if EVENT.type == pg.QUIT or (EVENT.type == pg.KEYDOWN and EVENT.key == pg.K_q):
                 pg.quit()
@@ -34,12 +34,12 @@ class Game:
             elif EVENT.type == pg.KEYDOWN:
                 self.logic.control(pressed_key=EVENT.key)
 
-    def check_game_over(self):
+    def check_game_over(self): #check_game_over используется для проверки на наличие окончания игры и запуска экрана game_over_screen
         for i in range(FIELD_W):
             if self.logic.cup[1][i]:
                 self.game_over_screen()
 
-    def record_screen(self):
+    def record_screen(self): #record_screen используется для отображения экрана рекордов игры
         flag = True
         self.screen.blit(self.bg_image, self.bg_image.get_rect())
         self.drop_shadow_text('Your record:', 120, FIELD_RES[0] // 2 - 100, 100)
@@ -54,7 +54,7 @@ class Game:
                     return
             pg.display.update()
 
-    def start_menu_screen(self):
+    def start_menu_screen(self): #start_menu_screen используется для отображения начального экрана меню игры
         start = False
 
         while not start:
@@ -73,7 +73,7 @@ class Game:
             self.drop_shadow_text('press ENTER to start game', 60, FIELD_RES[0] // 2 - 100, FIELD_RES[1] // 2)
             pg.display.update()
 
-    def pause_screen(self):
+    def pause_screen(self): #pause_screen используется для отображения экрана паузы игры
         paused = True
         pause = pg.Surface(FIELD_RES, pg.SRCALPHA)
         pause.fill((0, 0, 255, 127))
@@ -91,7 +91,7 @@ class Game:
 
             pg.display.update()
 
-    def game_over_screen(self):
+    def game_over_screen(self): #game_over_screen используется для отображения экрана окончания игры.
         set_record(self.logic.score)
         pause = pg.Surface(FIELD_RES, pg.SRCALPHA)
         pause.fill((0, 0, 255, 127))
@@ -112,19 +112,22 @@ class Game:
 
     @staticmethod
     def draw_lines():
+        """
+        draw_lines используется для рисования сетки на игровом поле.
+        """
         for x in range(FIELD_W):
             for y in range(FIELD_H):
                 pg.draw.rect(game.screen, pg.Color(0, 0, 0),
                              (x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE), 2)
 
-    def draw(self):
+    def draw(self): #draw используется для отрисовки всех элементов игры на экране.
         self.screen.blit(self.bg_image, self.bg_image.get_rect())
         self.screen.fill(color=pg.Color(51, 51, 51), rect=(0, 0, *FIELD_RES))
         self.draw_lines()
         self.logic.draw()
         pg.display.flip()
 
-    def run(self):
+    def run(self): #run представляет основной игровой цикл, который обрабатывает события, отрисовывает видео кадры и обновляет данные игры
         self.start_menu_screen()
         while True:
             self.check_events()
@@ -133,6 +136,6 @@ class Game:
             self.check_game_over()
 
 
-if __name__ == '__main__':
+if __name__ == '__main__': #Основной блок исполнения игры.
     game = Game()
     game.run()

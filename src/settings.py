@@ -32,19 +32,19 @@ figures = [[pg.Rect(x + FIELD_W // 2, y + 1, 1, 1) for x, y in fig_pos] for fig_
 figure_rect = pg.Rect(0, 0, TILE_SIZE - 4, TILE_SIZE - 4)
 
 
-def load_images():
+def load_images(): # Загружает изображения блоков из директории и масштабирует их до TILE_SIZE
     files = [item for item in Path('src/blocks_images').rglob('*.png') if item.is_file()]
     images = [pg.image.load(file).convert_alpha() for file in files]
     images = [pg.transform.scale(imag, (TILE_SIZE, TILE_SIZE)) for imag in images]
     return images
 
 
-def get_record():
+def get_record(): # Читает рекорд из файла record.txt
     with open(Path("record.txt")) as f:
         return f.readline()
 
 
-def set_record(new_record):
+def set_record(new_record): # Устанавливает новый рекорд, если он больше текущего
     record = int(get_record())
     record = max(record, new_record)
     with open(Path("record.txt"), 'w') as f:
