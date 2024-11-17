@@ -19,7 +19,10 @@ class Tetris:
 
         self.logic = logic
 
-    def check_borders(self, i):# Проверяет, находится ли текущая фигура за границами игрового поля
+    def check_borders(self, i):
+        """ Проверяет, находится ли текущая фигура за границами игрового поля|i указывает, какой из 4 блоков текущей фигуры проверяется.
+Позволяет поочередно проверить каждый блок на выход за границы или столкновение."""
+
         if self.figure[i].x < 0 or self.figure[i].x > FIELD_W - 1:
             return False # Фигура вышла за левую или правую границу
         elif self.figure[i].y > FIELD_H - 1 or self.logic.cup[self.figure[i].y][self.figure[i].x]:
@@ -92,8 +95,7 @@ class Tetris:
 
 
 class GameLogic:
-    def __init__(self, game):# Инициализирует логику игры и игровое поле
-
+    def __init__(self, game: 'Game'): # Инициализирует логику игры и игровое поле
         self.cup = [[0 for _ in range(FIELD_W)] for _ in range(FIELD_H)] # Создает игровое поле
         self.game = game # Сохраняет ссылку на основной объект игры
 
@@ -106,7 +108,7 @@ class GameLogic:
 
         self.score = 0
 
-    def control(self, pressed_key): # Обрабатывает ввод пользователя для управления движением фигуры
+    def control(self, pressed_key: int): # Обрабатывает ввод пользователя для управления движением фигуры
         if pressed_key == pg.K_LEFT:
             self.dx = -1
         elif pressed_key == pg.K_RIGHT:
@@ -151,3 +153,4 @@ class GameLogic:
                     self.game.screen.blit(col, figure_rect) # Отрисовывает цвет на экране в установленной позиции
 
         self.draw_text() # Вызывает метод draw_text для отрисовки текстовой информации
+
